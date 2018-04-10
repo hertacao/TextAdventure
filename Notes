@@ -1,0 +1,46 @@
+COMTROLS:
+- HELP: shows standard help, not contextual
+- EXIT: exits game after confirmation with "yes or "y". Resumes play with "no" or "n".
+After 3 prompts with indefinit answer continues
+- HINT: shows hitn according to the current progress
+
+ACTIONS:
+1(0) Argument 
+- LOOK: short description of object. If it's scene lists all contained Objects.
+- EXAMINE: long description of object.
+
+- PICK_UP: Only items can be picked up, item is than in the inventory
+ " You pick up {item}"
+- GO_TO: change of location if it's a scene, otherwise not relevant
+ "You are at {location/item}"
+- OPEN: Only items can be opened, causes a status change of objects
+	"You open {item}"
+- CLOSE: Only items can be closed, causes a status change of objects
+	"You close {item}"
+- PUSH: Only items can be pushed, causes a status change of objects
+	"You pushed {item}"
+- PULL: Only items can be pulled, causes a status change oj objects
+	"You pulled {item}"
+- TALK_TO: Only persons/animals/telephone can be talked to
+
+- USE: There is another version with 2 arguments
+
+2(1) Argument
+- COMBINE: combines to items. Items has to be in reachable limit
+" You combine {item1} and {item2} into {newitem}"
+- GIVE: gives an item to a person/animal
+" You give {item} to {person/animal}"
+- USE: uses item on another item like :use key on door, use key with door
+" You used {item} on {item}"
+
+
+Questions: 
+Objects contain their description and their executable actions. Should actions contain the objects which can be performed on?
+util.Game creation is more intuitiv by object, whereas game play is more intuitiv by action.
+Where shoudl status be saved? Ideally in the util.Game Class as it saves the play in independently.
+How should the structure look like? Are 2 lists discovered and reachable enough to represent all states?
+It's easiest if 1 Argument actions are performed by their object. 
+Possible clash occurs if 0 Arguments are given. This can happen to LOOK and EXAMINE. 
+Which object is referred to? Last item or last scene? -> needs to be clarified
+2 Argument ACTIONS are better performed by action. COMBINE should have combination table or lists.
+How should CONTROLS be performed?
