@@ -12,48 +12,58 @@ import java.util.LinkedList;
  */
 @Getter
 @Setter
-public class Box extends Openable implements Container{
-    private LinkedList<Item> contained;
+public class Box extends OpenCloseItem implements Container{
+    private LinkedList<Item> content;
 
-    public Box(String name, boolean opened, LinkedList<Item> contained) {
-        super(name, opened);
-        this.contained = contained;
+    public Box(String name, String label, boolean opened, LinkedList<Item> content) {
+        super(name, label, opened);
+        this.content = content;
     }
 
     @Override
     public Response look() {
-        this.response.setSuccess(true);
-        output = this.pos_output.get(Action.LOOK) + this.description;
+        if (this.executable.contains(Action.LOOK)) {
+            String output = this.description + "\n";
 
-        if (!this.contained.isEmpty() && this.opened) {
-            output += "There is a ";
-            for (Item i: contained) {
-                output += i.toString() + ", ";
+            if (this.opened) {
+                if (this.content.isEmpty()) {
+                    output += "It's empty. ";
+                } else {
+                    output += "There is a ";
+                    for (Item i : content) {
+                        output += i.getLabel() + ", ";
+                    }
+                    output += "inside. ";
+                }
             }
+            this.setPosResponse(Action.LOOK, output);
+        } else {
+            setNegResponse(Action.LOOK);
         }
-
-        this.response.setOutput(output);
-
         return this.response;
     }
 
     @Override
     public Response examine() {
         if (this.executable.contains(Action.EXAMINE)) {
-            this.response.setSuccess(true);
+            String output;
+
             if (long_description != null) {
                 output = this.pos_output.get(Action.EXAMINE) + this.long_description;
             } else {
                 output = this.pos_output.get(Action.EXAMINE) + this.description;
             }
 
-            if (!this.contained.isEmpty() && this.opened) {
-                for (Item i : contained) {
-                    output += "There is a " + i.toString() + ". ";
-                    output += i.getDescription();
+            if (this.opened) {
+                if (this.content.isEmpty()) {
+                    output += "It's empty. ";
+                } else {
+                    for (Item i : content) {
+                        output += "There is a " + i.getLabel() + ". " + i.getDescription();
+                    }
                 }
             }
-            this.response.setOutput(output);
+            this.setPosResponse(Action.EXAMINE, output);
         } else {
             this.look();
         }

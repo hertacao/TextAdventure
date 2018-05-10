@@ -1,6 +1,8 @@
 package objects;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
+
 import commands.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,54 +12,56 @@ import util.*;
  */
 @Setter
 @Getter
-public class Scene extends Object implements Container{
+public class Scene extends AdvObject implements Container{
     // Connected scenes, like other rooms
-    private LinkedList<Scene> connected;
+    private List<Scene> connected;
     // Contained items, like keys, doors, ..
-    private LinkedList<Item> contained;
+    private List<Item> content;
 
     public Scene(String name) {
         super(name);
-        this.connected = new LinkedList<Scene>();
-        this.contained = new LinkedList<Item>();
+        this.connected = new ArrayList<>();
+        this.content = new ArrayList<>();
         executable.add(Action.GO);
         executable.add(Action.LOOK);
     }
 
     @Override
     public Response look() {
-        this.response.setSuccess(true);
-        output = this.pos_output.get(Action.LOOK) + this.description;
+        if (this.executable.contains(Action.LOOK)) {
+            String output = this.description + "\n";
 
-        if (!this.contained.isEmpty()) {
-            output += "There is a ";
-            for (Item i: contained) {
-                output += i.toString() + ", ";
+            if (!this.content.isEmpty()) {
+                output += "There is a ";
+                for (Item i : content) {
+                    output += i.getLabel() + ", ";
+                }
             }
+            this.setPosResponse(Action.LOOK, output);
+        } else {
+            this.setNegResponse(Action.LOOK);
         }
-
-        this.response.setOutput(output);
-
         return this.response;
     }
 
     @Override
     public Response examine() {
         if (this.executable.contains(Action.EXAMINE)) {
-            this.response.setSuccess(true);
+            String output;
+
             if (long_description != null) {
-                output = this.pos_output.get(Action.EXAMINE) + this.long_description;
+                output = this.long_description;
             } else {
-                output = this.pos_output.get(Action.EXAMINE) + this.description;
+                output = this.description;
             }
 
-            if (!this.contained.isEmpty()) {
-                for (Item i : contained) {
-                    output += "There is a " + i.toString() + ". ";
-                    output += i.getDescription();
+            if (!this.content.isEmpty()) {
+                for (Item i : content) {
+                    output += "There is a " + i.getLabel() + ". ";
+                    output += i.getDescription() + "\n";
                 }
             }
-            this.response.setOutput(output);
+            this.setPosResponse(Action.LOOK, output);
         } else {
             this.look();
         }

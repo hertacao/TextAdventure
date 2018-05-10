@@ -1,6 +1,9 @@
-package objects; /**
+package objects;
+
+/**
  * Created by Herta on 18.01.2018.
  */
+
 import lombok.*;
 import commands.*;
 import util.*;
@@ -9,51 +12,38 @@ import java.util.LinkedList;
 
 @Getter
 @Setter
-@ToString(of="name")
+//@ToString(of = "id, name, label")
 @NoArgsConstructor
-public abstract class Object {
+public abstract class AdvObject {
+    
     protected Integer id;
     protected String name;
+    protected String label;
     protected String description;
     protected String long_description;
     protected LinkedList<Action> executable;
     protected Response response;
-    protected String output;
 
-    protected EnumMap<Action, String> pos_output = new EnumMap<Action, String>(Action.class);
-    protected EnumMap<Action, String> no_output = new EnumMap<Action, String>(Action.class);
+    protected EnumMap<Action, String> pos_output = new EnumMap<>(Action.class);
+    protected EnumMap<Action, String> neg_output = new EnumMap<>(Action.class);
 
-    public Object(@NonNull String name) {
+    public AdvObject(@NonNull String name) {
         this.name = name;
-        this.description = "This is a " + this.toString();
-        this.executable = new LinkedList<Action>();
+        this.label = name;
+        this.build();
+    }
+
+    public AdvObject(@NonNull String name, @NonNull String label) {
+        this.name = name;
+        this.label = label;
+        this.build();
+    }
+
+    private void build(){
+        this.description = "This is a " + this.getLabel();
+        this.executable = new LinkedList<>();
         this.response = new Response();
-
-        pos_output.put(Action.LOOK, "You look at the " + this.toString());
-        pos_output.put(Action.EXAMINE, "You examine the " + this.toString());
-        pos_output.put(Action.PICK_UP, "You pick up a " + this.toString());
-        pos_output.put(Action.OPEN, "You open the " + this.toString());
-        pos_output.put(Action.CLOSE, "You close the " + this.toString());
-        pos_output.put(Action.PUSH, "You push the " + this.toString());
-        pos_output.put(Action.PULL, "You pull up the " + this.toString());
-        pos_output.put(Action.GO, "You go to the " + this.toString());
-        pos_output.put(Action.USE, "You use the " + this.toString());
-        pos_output.put(Action.GIVE, "You give the " + this.toString());
-        pos_output.put(Action.TALK, "You talk to " + this.toString());
-        pos_output.put(Action.COMBINE, "You combine " + this.toString());
-
-        no_output.put(Action.LOOK, "You can't look at the " + this.toString());
-        no_output.put(Action.EXAMINE, "You can't examine the " + this.toString());
-        no_output.put(Action.PICK_UP, "You can't pick up a " + this.toString());
-        no_output.put(Action.OPEN, "You can't open the " + this.toString());
-        no_output.put(Action.CLOSE, "You can't close the " + this.toString());
-        no_output.put(Action.PUSH, "You can't push the " + this.toString());
-        no_output.put(Action.PULL, "You can't pull up the " + this.toString());
-        no_output.put(Action.GO, "You can't go to the " + this.toString());
-        no_output.put(Action.USE, "You can't use the " + this.toString());
-        no_output.put(Action.GIVE, "You can't give the " + this.toString());
-        no_output.put(Action.TALK, "You can't talk to " + this.toString());
-        no_output.put(Action.COMBINE, "You can't combine " + this.toString());
+        this.executable.add(Action.LOOK);
     }
 
     public String possible() {
@@ -64,30 +54,79 @@ public abstract class Object {
         output += "it";
         return output;
     }
+    protected Response setPosResponse(Action act) {
+        this.response.setSuccess(true);
+        if (this.pos_output.get(act) != null) {
+            this.response.setOutput(this.pos_output.get(act));
+        } else {
+            this.response.setOutput(act.pos_output() + this.getLabel());
+        }
+        
+        return this.response;
+    }
+
+    protected Response setPosResponse(Action act, String output) {
+        this.response.setSuccess(true);
+        if (this.pos_output.get(act) != null) {
+            this.response.setOutput(this.pos_output.get(act));
+        } else {
+            this.response.setOutput(output);
+        }
+
+        return this.response;
+    }
+
+    protected Response setNegResponse(Action act) {
+        this.response.setSuccess(false);
+        if (this.pos_output.get(act) != null) {
+            this.response.setOutput(this.neg_output.get(act));
+        } else {
+            this.response.setOutput(act.neg_output() + this.getLabel());
+        }
+
+        return this.response;
+    }
+
+    protected Response setNegResponse(Action act, String output) {
+        this.response.setSuccess(false);
+        if (this.pos_output.get(act) != null) {
+            this.response.setOutput(this.neg_output.get(act));
+        } else {
+            this.response.setOutput(output);
+        }
+
+        return this.response;
+    }
+
+    private Response action (Action act) {
+        if (this.executable.contains(act))  {
+            this.setPosResponse(act);
+        }
+        else {
+            this.setNegResponse(act);
+        }
+        return this.response;
+    }
 
     public Response look() {
         if (this.executable.contains(Action.LOOK))  {
-            this.response.setSuccess(true);
-            this.response.setOutput(this.pos_output.get(Action.LOOK) + this.description);
+            this.setPosResponse(Action.LOOK, this.description);
         }
         else {
-            this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.LOOK));
+            this.setNegResponse(Action.LOOK);
         }
         return this.response;
     }
     public Response examine() {
         if (this.executable.contains(Action.EXAMINE))  {
-            this.response.setSuccess(true);
             if (long_description != null) {
-                this.response.setOutput(this.pos_output.get(Action.EXAMINE) + this.long_description);
+                this.setPosResponse(Action.LOOK, this.long_description);
             } else {
-                this.response.setOutput(this.pos_output.get(Action.EXAMINE) + this.description);
+                this.setPosResponse(Action.LOOK, this.description);
             }
         }
         else {
-            this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.EXAMINE));
+            this.setNegResponse(Action.EXAMINE);
         }
         return this.response;
     }
@@ -98,7 +137,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.PICK_UP));
+            this.response.setOutput(this.neg_output.get(Action.PICK_UP));
         }
         return this.response;
     }
@@ -109,7 +148,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.OPEN));
+            this.response.setOutput(this.neg_output.get(Action.OPEN));
         }
         return this.response;
     }
@@ -120,7 +159,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.CLOSE));
+            this.response.setOutput(this.neg_output.get(Action.CLOSE));
         }
         return this.response;
     }
@@ -131,7 +170,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.PUSH));
+            this.response.setOutput(this.neg_output.get(Action.PUSH));
         }
         return this.response;
     }
@@ -142,7 +181,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.PULL));
+            this.response.setOutput(this.neg_output.get(Action.PULL));
         }
         return this.response;
     }
@@ -153,7 +192,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.GO));
+            this.response.setOutput(this.neg_output.get(Action.GO));
         }
         return this.response;
     }
@@ -164,7 +203,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.USE));
+            this.response.setOutput(this.neg_output.get(Action.USE));
         }
         return this.response;
     }
@@ -175,7 +214,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.GIVE));
+            this.response.setOutput(this.neg_output.get(Action.GIVE));
         }
         return this.response;
     }
@@ -186,7 +225,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.TALK));
+            this.response.setOutput(this.neg_output.get(Action.TALK));
         }
         return this.response;
     }
@@ -197,7 +236,7 @@ public abstract class Object {
         }
         else {
             this.response.setSuccess(false);
-            this.response.setOutput(this.no_output.get(Action.COMBINE));
+            this.response.setOutput(this.neg_output.get(Action.COMBINE));
         }
         return this.response;
     }

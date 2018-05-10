@@ -4,7 +4,7 @@ import commands.Action;
 import commands.Control;
 import lombok.Getter;
 import lombok.Setter;
-import objects.Object;
+import objects.AdvObject;
 import util.*;
 
 import java.util.LinkedList;
@@ -20,21 +20,21 @@ public class Searcher {
     private String input;
     private LinkedList<Control> cont;
     private LinkedList<Action> act;
-    private LinkedList<Object> obj;
+    private LinkedList<AdvObject> obj;
     private Game game;
 
     public Searcher() {
         sc = new Scanner(System.in);
-        cont = new LinkedList<Control>();
-        act = new LinkedList<Action>();
-        obj = new LinkedList<Object>();
+        cont = new LinkedList<>();
+        act = new LinkedList<>();
+        obj = new LinkedList<>();
     }
 
     public Boolean bool_search() {
         this.read();
-        if (input.contains("yes") || input == "y") {
+        if (input.contains("yes") || input.equals("y")) {
             return true;
-        } else if (input.contains("no") || input == "n") {
+        } else if (input.contains("no") || input.equals("n")) {
             return false;
         }
         return null;
@@ -71,8 +71,8 @@ public class Searcher {
     }
 
     private void searchObject() {
-        for (Object o : game.getReachable()) {
-            if (input.contains(o.toString())) {
+        for (AdvObject o : game.getReachable()) {
+            if (input.contains(o.getLabel())) {
                 obj.add(o);
             }
         }

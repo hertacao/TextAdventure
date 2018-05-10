@@ -1,5 +1,6 @@
 package util;
 
+import objects.Button;
 import objects.Scene;
 import process.*;
 
@@ -9,7 +10,7 @@ import process.*;
 public class App {
     public static void main(String[] args) {
         // builds Objects
-        Scene s1 = new Scene("living room");
+        /*Scene s1 = new Scene("living room");
         Scene s2 = new Scene("kitchen");
         Scene s3 = new Scene("bedroom");
 
@@ -22,6 +23,9 @@ public class App {
             searcher.search();
             handler.handle();
 
-        }
+        }*/
+        Button b = new Button();
+        System.out.println(b.getLabel());
+
     }
 }

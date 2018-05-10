@@ -1,11 +1,11 @@
 package objects;
 
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Herta on 22.01.2018.
  */
 public interface Container {
-    LinkedList<Item> getContained();
+    List<Item> getContent();
 
 }

@@ -6,7 +6,7 @@ After 3 prompts with indefinit answer continues
 
 ACTIONS:
 1(0) Argument 
-- LOOK: short description of object. If it's scene lists all contained Objects.
+- LOOK: short description of object. If it's scene lists all content Objects.
 - EXAMINE: long description of object.
 
 - PICK_UP: Only items can be picked up, item is than in the inventory

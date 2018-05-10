@@ -1,12 +1,11 @@
-package process; /**
- * Created by Herta on 18.01.2018.
- */
+package process;
+
 import commands.Action;
 import commands.Command;
 import commands.Control;
 import lombok.Getter;
 import lombok.Setter;
-import objects.Object;
+import objects.AdvObject;
 import util.Response;
 
 import java.util.*;
@@ -24,7 +23,7 @@ public class Handler {
     private Executer executer;
     private Searcher searcher;
 
-    private Object last_obj;
+    private AdvObject last_obj;
     private Command last_com;
     private Response response;
 
@@ -34,7 +33,7 @@ public class Handler {
     public void handle() {
         LinkedList<Control> cont = this.searcher.getCont();
         LinkedList<Action> act = this.searcher.getAct();
-        LinkedList<Object> obj = this.searcher.getObj();
+        LinkedList<AdvObject> obj = this.searcher.getObj();
 
         switch (cont.size()) {
             case 0: this.action(act, obj);
@@ -49,7 +48,7 @@ public class Handler {
         }
     }
 
-    private void action(LinkedList<Action> act, LinkedList<Object> obj) {
+    private void action(LinkedList<Action> act, LinkedList<AdvObject> obj) {
         switch (act.size()) {
             case 0: this.zeroAction(act, obj);
             case 1: this.oneAction(act, obj);
@@ -57,7 +56,7 @@ public class Handler {
         }
     }
 
-    private void oneAction(LinkedList<Action> act, LinkedList<Object> obj) {
+    private void oneAction(LinkedList<Action> act, LinkedList<AdvObject> obj) {
         // Action Command
         switch (obj.size()) {
             // Zero Objects
@@ -66,14 +65,14 @@ public class Handler {
                 this.response = executer.execAction(act.getFirst(), obj);
                 last_com = act.getFirst();
             }
-            // One Object
+            // One AdvObject
             case 1: {
                 this.response = executer.execAction(act.getFirst(), obj);
                 last_obj = obj.getLast();
                 last_com = act.getFirst();
             }
 
-            // Two Object
+            // Two AdvObject
             case 2: {
                 this.response = executer.execAction(act.getFirst(), obj);
                 last_obj = obj.getLast();
@@ -87,17 +86,17 @@ public class Handler {
     }
 
     // Contextual Interpretation
-    private void zeroAction(LinkedList<Action> act, LinkedList<Object> obj) {
+    private void zeroAction(LinkedList<Action> act, LinkedList<AdvObject> obj) {
         switch (obj.size()) {
             // Zero Objects
             case 0: {
                 this.response.setOutput("I don't know what you want to do. Say help to open the help menu.");
                 this.response.setSuccess(false);
             }
-            // One Object
+            // One AdvObject
             case 1: {
                 if (last_com instanceof Control) {
-                    this.response.setOutput("Please say what you want to do with " + obj.getFirst().toString());
+                    this.response.setOutput("Please say what you want to do with " + obj.getFirst().getLabel());
                     this.response.setSuccess(false);
                 }
                 else if (last_com instanceof Action) {
