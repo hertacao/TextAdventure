@@ -3,8 +3,8 @@ package build;
 import process.*;
 import process.request.Request;
 import util.AdvStringBuilder;
-import util.languages.English;
-import util.languages.Language;
+import language.English;
+import language.Language;
 
 /**
  * Created by Herta on 19.01.2018.

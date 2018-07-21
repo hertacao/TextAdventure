@@ -1,6 +1,6 @@
 package process.request;
 
-import commands.Status;
+import command.Status;
 import lombok.NonNull;
 import lombok.ToString;
 import process.Response;

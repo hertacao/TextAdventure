@@ -2,9 +2,9 @@ package build;
 
 import lombok.Getter;
 import lombok.Setter;
-import objects.quality_interface.AdvObject;
-import objects.Item;
-import objects.Scene;
+import object.quality_interface.AdvObject;
+import object.Item;
+import object.Scene;
 import process.Response;
 import util.AdvStringBuilder;
 

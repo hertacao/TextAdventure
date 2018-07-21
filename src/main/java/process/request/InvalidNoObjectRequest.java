@@ -1,7 +1,7 @@
 package process.request;
 
 import build.Game;
-import commands.Action;
+import command.Action;
 import lombok.ToString;
 import process.Response;
 
@@ -18,6 +18,6 @@ public class InvalidNoObjectRequest extends Request {
 
     @Override
     public Response invoke (Game game, Object... args) {
-        return new Response("Please tell which two objects you like to " + this.action.toString() + ".", false);
+        return new Response("Please tell which two object you like to " + this.action.toString() + ".", false);
     }
 }

@@ -1,14 +1,13 @@
 package util;
 
-import commands.Command;
+import command.Command;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import util.languages.Article;
-import util.languages.Language;
+import language.Article;
+import language.Language;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 

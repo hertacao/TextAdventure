@@ -1,13 +1,12 @@
 package process.request;
 
 import build.Game;
-import commands.Action;
+import command.Action;
 import lombok.NonNull;
 import lombok.ToString;
-import objects.quality_interface.AdvObject;
 import process.Response;
 import util.AdvStringBuilder;
-import util.languages.Article;
+import language.Article;
 
 import java.util.List;
 import java.util.Set;

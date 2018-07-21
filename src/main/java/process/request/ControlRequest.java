@@ -1,6 +1,6 @@
 package process.request;
 
-import commands.BaseControl;
+import command.BaseControl;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;

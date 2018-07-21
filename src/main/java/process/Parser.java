@@ -1,13 +1,13 @@
 package process;
 
 import build.Game;
-import commands.*;
+import command.*;
 import lombok.Getter;
 import lombok.Setter;
-import objects.quality_interface.AdvObject;
+import object.quality_interface.AdvObject;
 import process.request.*;
 import util.*;
-import util.languages.Language;
+import language.Language;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -237,7 +237,7 @@ public class Parser {
                     .collect(Collectors.groupingBy(AdvObject::getDefiningIDType))
                     .keySet();
             //idType.forEach(System.out::println);
-            // special handling if the objects are defined by direction, need to look for directions in Scene
+            // special handling if the object are defined by direction, need to look for directions in Scene
             if (idType.size() == 1 && idType.contains(IDType.DIRECTION)) {
                 //System.out.println("Special");
                 List<Direction> input_direction = this.searchDirection(input);
@@ -253,7 +253,7 @@ public class Parser {
                 } else {
                     label.put(entry.getKey(), Collections.emptyList());
                 }
-                // define objects by their description, please complete
+                // define object by their description, please complete
             } else {
                 List<? extends Token> identifier = idType.stream()
                         .map(i -> this.searchOther(this.input, i))

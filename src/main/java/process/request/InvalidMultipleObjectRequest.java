@@ -1,10 +1,10 @@
 package process.request;
 
 import build.Game;
-import commands.Action;
+import command.Action;
 import lombok.NonNull;
 import lombok.ToString;
-import objects.quality_interface.AdvObject;
+import object.quality_interface.AdvObject;
 import process.Response;
 import util.AdvStringBuilder;
 

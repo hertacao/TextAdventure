@@ -13,13 +13,13 @@ ACTIONS:
  " You pick up {item}"
 - GO: change of location if it's a scene, otherwise not relevant
  "You are at {location/item}"
-- OPEN: Only items can be closed, causes a status change of objects
+- OPEN: Only items can be closed, causes a status change of object
 	"You open {item}"
-- CLOSE: Only items can be closed, causes a status change of objects
+- CLOSE: Only items can be closed, causes a status change of object
 	"You close {item}"
-- PUSH: Only items can be pushed, causes a status change of objects
+- PUSH: Only items can be pushed, causes a status change of object
 	"You pushed {item}"
-- PULL: Only items can be pulled, causes a status change oj objects
+- PULL: Only items can be pulled, causes a status change oj object
 	"You pulled {item}"
 - TALK_TO: Only persons/animals/telephone can be talked to
 
@@ -38,12 +38,12 @@ INTERFACE:
 The interfaces define if a certain action can be generally performed by this object.
 This is handeled by the instanceof checks in Enum Action.
 Otherwise the executable list specifies if this action can be performed in the current state of this object.
-This is handled by the objects themself.
+This is handled by the object themself.
 
 PROCESS:
 
 Questions: 
-Objects contain their description and their executable actions. Should actions contain the objects which can be performed on?
+Objects contain their description and their executable actions. Should actions contain the object which can be performed on?
 build.Game creation is more intuitiv by object, whereas game play is more intuitiv by action.
 Where should status be saved? Ideally in the build.Game Class as it saves the play in independently.
 How should the structure look like? Are 2 lists discovered and reachable enough to represent all states?
@@ -57,7 +57,7 @@ How should CONTROLS be performed?
 - Missing:
 
 - put action, like putting something somewhere
-- handle unclear commands where objects posses the same name
+- handle unclear command where object posses the same name
 - synonymes and spell checker(levenstein)
 
 PROBLEMS:

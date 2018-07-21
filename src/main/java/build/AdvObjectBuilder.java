@@ -1,9 +1,9 @@
 package build;
 
 import lombok.Getter;
-import objects.Door;
-import objects.Scene;
-import objects.quality_interface.Connector;
+import object.Door;
+import object.Scene;
+import object.quality_interface.Connector;
 import util.RelativeDirection;
 
 import java.util.LinkedList;

@@ -1,10 +1,9 @@
 package process.request;
 
 import build.Game;
-import commands.Action2P;
-import commands.TwoPredicateAction;
+import command.TwoPredicateAction;
 import lombok.ToString;
-import objects.quality_interface.AdvObject;
+import object.quality_interface.AdvObject;
 import process.Response;
 
 import java.util.List;
