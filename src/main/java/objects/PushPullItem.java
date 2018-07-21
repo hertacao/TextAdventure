@@ -1,18 +1,17 @@
 package objects;
 
-import com.sun.org.apache.bcel.internal.generic.PUSH;
-import commands.Action;
+import commands.BaseAction;
 import lombok.NonNull;
-import util.Response;
+import objects.action_inferface.Pullable;
+import process.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 /**
  * Created by Herta on 05.05.2018.
  */
-public abstract class PushPullItem extends PushItem{
+public abstract class PushPullItem extends PushItem implements Pullable {
 
     public PushPullItem(
             @NonNull String name,
@@ -25,12 +24,12 @@ public abstract class PushPullItem extends PushItem{
 
     @Override
     public Response pull() {
-        if(this.reachables.contains(this.positions.get(this.currentIndex - 1)) && this.executable.contains(Action.PULL)) {
+        if(this.reachables.contains(this.positions.get(this.currentIndex - 1)) && this.executable.contains(BaseAction.PULL)) {
             this.currentIndex--;
             this.currentPosition = this.positions.get(this.currentIndex);
-            this.setPosResponse(Action.PULL, Action.PULL.pos_output() + this.getLabel() + " to " + currentPosition);
+            this.respondPositive(BaseAction.PULL, BaseAction.PULL.pos_output() + this.getLabel() + " to " + currentPosition);
         } else {
-            this.setNegResponse(Action.PULL);
+            this.respondNegative(BaseAction.PULL);
         }
         return this.response;
     }

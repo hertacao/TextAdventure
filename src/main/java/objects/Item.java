@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
  */
 //@NoArgsConstructor
 //@RequiredArgsConstructor
-public abstract class Item extends AdvObject {
+public abstract class Item extends AbstractAdvObject {
     public Item(String name) { super(name);}
     public Item(String name, String label) { super(name ,label);}
 }

@@ -6,14 +6,14 @@ After 3 prompts with indefinit answer continues
 
 ACTIONS:
 1(0) Argument 
-- LOOK: short description of object. If it's scene lists all content Objects.
+- LOOK: short description of object. If it's scene lists all contents Objects.
 - EXAMINE: long description of object.
 
 - PICK_UP: Only items can be picked up, item is than in the inventory
  " You pick up {item}"
-- GO_TO: change of location if it's a scene, otherwise not relevant
+- GO: change of location if it's a scene, otherwise not relevant
  "You are at {location/item}"
-- OPEN: Only items can be opened, causes a status change of objects
+- OPEN: Only items can be closed, causes a status change of objects
 	"You open {item}"
 - CLOSE: Only items can be closed, causes a status change of objects
 	"You close {item}"
@@ -32,15 +32,36 @@ ACTIONS:
 " You give {item} to {person/animal}"
 - USE: uses item on another item like :use key on door, use key with door
 " You used {item} on {item}"
+- PUT
 
+INTERFACE:
+The interfaces define if a certain action can be generally performed by this object.
+This is handeled by the instanceof checks in Enum Action.
+Otherwise the executable list specifies if this action can be performed in the current state of this object.
+This is handled by the objects themself.
+
+PROCESS:
 
 Questions: 
 Objects contain their description and their executable actions. Should actions contain the objects which can be performed on?
-util.Game creation is more intuitiv by object, whereas game play is more intuitiv by action.
-Where shoudl status be saved? Ideally in the util.Game Class as it saves the play in independently.
+build.Game creation is more intuitiv by object, whereas game play is more intuitiv by action.
+Where should status be saved? Ideally in the build.Game Class as it saves the play in independently.
 How should the structure look like? Are 2 lists discovered and reachable enough to represent all states?
 It's easiest if 1 Argument actions are performed by their object. 
 Possible clash occurs if 0 Arguments are given. This can happen to LOOK and EXAMINE. 
 Which object is referred to? Last item or last scene? -> needs to be clarified
 2 Argument ACTIONS are better performed by action. COMBINE should have combination table or lists.
 How should CONTROLS be performed?
+
+
+- Missing:
+
+- put action, like putting something somewhere
+- handle unclear commands where objects posses the same name
+- synonymes and spell checker(levenstein)
+
+PROBLEMS:
+- Use exists as a TwoPredicate and OnePredicate. Use key/ use key on door
+- similar to open: open door/ open door with key
+- how do i handle two words? like pick up, walk to, look at
+- move means push or pull, move to means go, how to determine?
