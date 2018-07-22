@@ -8,6 +8,7 @@ import object.Scene;
 import process.Response;
 import util.AdvStringBuilder;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,6 +73,30 @@ public class Game {
             this.response.setSuccess(false);
         }
         return this.response;
+    }
+
+    public void addDiscovered(Collection<AdvObject> discovery) {
+        this.discovered.addAll(discovery);
+    }
+
+    public void addDiscovered(AdvObject discovery) {
+        this.discovered.add(discovery);
+    }
+
+    public void addReachable(Collection<AdvObject> discovery) {
+        this.reachable.addAll(discovery);
+    }
+
+    public void addReachable(AdvObject discovery) {
+        this.reachable.add(discovery);
+    }
+
+    public void removeReachable(Collection<AdvObject> discovery) {
+        this.reachable.removeAll(discovery);
+    }
+
+    public void removeReachable(AdvObject discovery) {
+        this.reachable.remove(discovery);
     }
 
     public String toString() {

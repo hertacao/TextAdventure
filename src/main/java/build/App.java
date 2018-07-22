@@ -15,6 +15,7 @@ public class App {
         AdvStringBuilder.setLanguage(new English());
         AdvObjectBuilder builder = new AdvObjectBuilder();
         builder.build();
+        System.out.println(builder.toString());
 
         Game game = new Game(builder.getScenes().getFirst());
         game.setRunning(true);

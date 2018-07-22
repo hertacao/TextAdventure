@@ -8,15 +8,16 @@ import util.Token;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface AdvObject extends Token {
     Integer getId();
     String getName();
     String getLabel();
-    List<String> getReference();
+    Set<String> getReference();
     String getDescription();
     String getLong_description();
-    LinkedList<Action> getExecutable();
+    Set<Action> getExecutable();
     Response getResponse();
     IDType getDefiningIDType();
 
@@ -30,5 +31,7 @@ public interface AdvObject extends Token {
     Response look();
     Response examine();
     Response go();
+
+    String print();
 
 }

@@ -1,9 +1,11 @@
 package build;
 
 import lombok.Getter;
+import object.AbstractAdvObject;
 import object.Door;
 import object.Room;
 import object.Scene;
+import object.quality_interface.AdvObject;
 import object.quality_interface.Connector;
 import util.RelativeDirection;
 
@@ -42,6 +44,22 @@ public class AdvObjectBuilder {
         bedroom.addConnector(door_bed, RelativeDirection.LEFT, livingroom) ;
 
         //this.autoconnect();
+    }
+
+    public String toString() {
+        StringBuilder output = new StringBuilder("scenes: ");
+        output.append('\n');
+        this.scenes.stream()
+                .map(AdvObject::print)
+                .forEach(o -> {output.append(o); output.append('\n');});
+        output.append('\n');
+        output.append("connectors: ");
+        output.append('\n');
+        this.connectors.stream()
+                .map(AdvObject::print)
+                .forEach(o -> {output.append(o); output.append('\n');});
+
+        return output.toString();
     }
 
     /*

@@ -13,10 +13,7 @@ import object.quality_interface.AdvObject;
 import process.Response;
 import util.IDType;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -30,11 +27,11 @@ public abstract class AbstractAdvObject implements AdvObject, Lookable, Examinab
     // printed name for player
     protected String label;
     // List of alternative String referring to this object
-    protected List<String> reference;
+    protected Set<String> reference;
     protected String description;
     protected String long_description;
     // list of Actions that can be performed on this object
-    protected LinkedList<Action> executable;
+    protected Set<Action> executable;
     // Response created by object
     protected Response response;
     // how this object is identified when there are multiple objects with same label
@@ -48,12 +45,12 @@ public abstract class AbstractAdvObject implements AdvObject, Lookable, Examinab
         this.name = name;
         this.label = label;
         this.description = "This is a " + this.label + ". ";
-        this.executable = new LinkedList<>();
+        this.executable = new HashSet<>();
         this.response = new Response();
         this.executable.add(BaseAction.LOOK);
         this.executable.add(BaseAction.EXAMINE);
         this.executable.add(BaseAction.GO);
-        this.reference = new LinkedList<>();
+        this.reference = new HashSet<>();
         this.reference.add(label);
         this.definingIDType = IDType.NONE;
     }
@@ -143,5 +140,24 @@ public abstract class AbstractAdvObject implements AdvObject, Lookable, Examinab
 
     public String toString() {
         return this.label;
+    }
+
+    public String print() {
+        StringBuilder output = new StringBuilder("name: ");
+        output.append(this.name);
+        output.append("    ");
+        output.append("label: ");
+        output.append(this.label);
+        output.append("    ");
+        output.append("ref: ");
+        output.append(this.reference);
+        output.append('\n');
+        output.append("exec: ");
+        output.append(this.executable);
+        output.append("    ");
+        output.append("idtype: ");
+        output.append(this.definingIDType);
+
+        return output.toString();
     }
 }

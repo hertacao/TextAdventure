@@ -159,12 +159,21 @@ public enum BaseAction implements OnePredicateAction {
             if (o instanceof Goable) {
                 Response response = ((Goable) o).go();
                 if (response.isSuccess() & o instanceof Scene) {
+                    game.addDiscovered(o);
                     game.setLocation((Scene) o);
                     game.getReachable().clear();
                     Set<AdvObject> content = new HashSet<>();
                     content.add(o);
                     content.addAll(((Scene) o).getContents());
                     content.addAll(((Scene) o).getLinks().keySet());
+                    ((Scene) o).getLinks().forEach(
+                            (connector, scene) -> {
+                                if(!(connector instanceof Openable)) {
+                                    content.add(scene);
+                                } else if (!((Openable) connector).isClosed()) {
+                                    content.add(scene);
+                                }
+                            });
                     content.retainAll(game.getDiscovered());
                     game.setReachable(content);
                 }
