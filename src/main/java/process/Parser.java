@@ -27,6 +27,7 @@ public class Parser {
     private List<String> input;
     private LinkedList<Action> action;
     private LinkedList<Control> control;
+    private LinkedList<Token> other;
     private LinkedList<AdvObject> object;
 
     public Parser(Language language, Executer executer, Game game) {
@@ -37,6 +38,7 @@ public class Parser {
         this.last_obj = game.getLocation();
         this.action = new LinkedList<>();
         this.control = new LinkedList<>();
+        this.other = new LinkedList<>();
         this.object = new LinkedList<>();
     }
 
@@ -117,7 +119,6 @@ public class Parser {
                         } else {
                             this.last_obj = id_object.get(1);
                             return new TwoPredicateRequest(this.input, (TwoPredicateAction) this.last_com, id_object.get(0), id_object.get(1));
-                            // System.out.println("ERROR");
                         }
                 }
             } else { return new UnknownRequest(this.input); }
@@ -183,33 +184,39 @@ public class Parser {
     private void classify(List<String> input) {
         this.action.clear();
         this.control.clear();
+        this.other.clear();
+        Map<List<String>, Token> keywords = new HashMap<>();
+        Map<List<String>, Token> map;
 
         for (Map.Entry<Token, List<String>> token : this.language.getToken().entrySet()) {
             token.getValue().stream().map(str -> Arrays.asList(str.split(" ")))
-                    .forEach(
-                            w -> {
-                                if (input.containsAll(w)) {
-                                    if (token.getKey() instanceof Action) {
-                                        this.action.add((Action) token.getKey());
-                                    } else if (token.getKey() instanceof Control) {
-                                        this.control.add((Control) token.getKey());
-                                    }
-                                }
-                            });
-
+                    .filter(input::containsAll)
+                    .forEach(string_list -> keywords.put(string_list, token.getKey()));
         }
-        this.object = game.getReachable().stream().filter(o -> !Collections.disjoint(input, o.getReference())).collect(Collectors.toCollection(LinkedList::new));
-    }
 
-    private LinkedList<Direction> searchDirection(List<String> input) {
-        LinkedList<Direction> direction = new LinkedList<>();
-        Arrays.stream(CardinalDirection.values()).filter(a -> input.contains(a.toString())).forEach(direction::add);
-        Arrays.stream(RelativeDirection.values()).filter(a -> input.contains(a.toString())).forEach(direction::add);
-        return direction;
+        System.out.println(keywords);
+
+        for (Map.Entry<List<String>, Token> keyword : keywords.entrySet()) {
+            map = new HashMap<>(keywords);
+            map.remove(keyword.getKey());
+            if (map.keySet().stream().noneMatch(k -> k.containsAll(keyword.getKey()))) {
+                if (keyword.getValue() instanceof Action) {
+                    action.add((Action) keyword.getValue());
+                } else if (keyword.getValue() instanceof Control) {
+                    control.add((Control) keyword.getValue());
+                } else {
+                    other.add(keyword.getValue());
+                }
+            }
+        }
+
+        this.object = game.getReachable().stream()
+                .filter(o -> !Collections.disjoint(input, o.getReference()))
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     private LinkedList<? extends Token> searchOther(List<String> input, IDType idType) {
-        switch(idType) {
+        switch (idType) {
             case DIRECTION: {
                 LinkedList<Direction> direction = new LinkedList<>();
                 Arrays.stream(CardinalDirection.values()).filter(a -> input.contains(a.toString())).forEach(direction::add);
@@ -241,18 +248,13 @@ public class Parser {
             Set<IDType> idType = entry.getValue().stream()
                     .collect(Collectors.groupingBy(AdvObject::getDefiningIDType))
                     .keySet();
-            //idType.forEach(System.out::println);
             // special handling if the object are defined by direction, need to look for directions in Scene
             if (idType.size() == 1 && idType.contains(IDType.DIRECTION)) {
-                //System.out.println("Special");
-                List<Direction> input_direction = this.searchDirection(input);
-                //input_direction.forEach(System.out::println);
+                // find if direction in input exists at current location
                 List<AdvObject> connector = game.getLocation().getDirection().entrySet().stream()
-                        .filter(d -> input_direction.contains(d.getValue()))
+                        .filter(direction-> this.other.contains(direction.getValue()))
                         .map(Map.Entry::getKey)
                         .collect(Collectors.toList());
-                //connector.forEach(System.out::println);
-                //System.out.println("connector size:" + connector.size());
                 if (connector.size() <= max_ObjectPerLabel) {
                     label.put(entry.getKey(), connector);
                 } else {
@@ -280,6 +282,9 @@ public class Parser {
         output.append("action: ");
         output.append(this.action);
         output.append("    ");
+        output.append("other: ");
+        output.append(this.other);
+        output.append('\n');
         output.append("object: ");
         this.object.stream().map(AdvObject::getName).forEach(o -> {output.append(o); output.append(", ");});
         output.append('\n');

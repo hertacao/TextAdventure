@@ -196,8 +196,4 @@ public enum BaseAction implements OnePredicateAction {
         }
         public Response exec(Game game, @NonNull AdvObject o) {return null;}
     }
-
-    //public String pos_output() {return null;}
-    //public String neg_output() {return null;}
-    //public Response exec(@NonNull AdvObject o, Game game) {return null;}
 }

@@ -55,5 +55,14 @@ public enum Routine implements OnePredicateAction {
                 return o.respondNegative(Routine.MOVE);
             }
         }
+    },
+    LOOK_AROUND {
+        @Override
+        public String toString() { return "look around"; }
+        public String pos_output() { return "You look around the "; }
+        public String neg_output() { return "You can't look around the "; }
+        public Response exec(Game game, @NonNull AdvObject o) {
+            return BaseAction.LOOK.exec(game, game.getLocation());
+        }
     }
 }

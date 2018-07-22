@@ -13,7 +13,7 @@ public class Response {
     private String output;
     private boolean success;
 
-    public void print() {
-        System.out.println(this.output);
+    public String toString() {
+        return this.output;
     }
 }

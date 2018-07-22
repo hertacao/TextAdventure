@@ -10,7 +10,6 @@ public class Executer {
 
     // process.Executer for Controls
     public Response invokeRequest(Request request, Game game) {
-        System.out.println(request.toString());
         return request.invoke(game);
     }
 

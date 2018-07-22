@@ -10,12 +10,23 @@ import language.Language;
  * Created by Herta on 19.01.2018.
  */
 public class App {
+
+    public enum Mode {
+        NORMAL,
+        DEBUG
+    }
+
     public static void main(String[] args) {
+        Mode mode = Mode.DEBUG;
         Language language = new English();
         AdvStringBuilder.setLanguage(new English());
         AdvObjectBuilder builder = new AdvObjectBuilder();
         builder.build();
-        System.out.println(builder.toString());
+
+        if(mode == Mode.DEBUG) {
+            System.out.println(builder.toString());
+            System.out.println("============================================");
+        }
 
         Game game = new Game(builder.getScenes().getFirst());
         game.setRunning(true);
@@ -26,10 +37,17 @@ public class App {
 
         while(game.isRunning()) {
             Request request = parser.buildRequest();
-            System.out.println(parser.toString());
             Response response = executer.invokeRequest(request, game);
-            response.print();
-            System.out.println(game.toString());
+            System.out.println(response.toString());
+
+            if(mode == Mode.DEBUG) {
+                System.out.println();
+                System.out.println(parser.toString());
+                System.out.println("----------------------------------------");
+                System.out.println(request.toString());
+                System.out.println("----------------------------------------");
+                System.out.println(game.toString());
+            }
         }
     }
 }

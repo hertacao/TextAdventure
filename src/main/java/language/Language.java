@@ -11,13 +11,4 @@ public abstract class Language {
 
     protected abstract Map<Token, List<String>> createMap();
     public abstract String getArticle(String label, Article article_type);
-
-    public Token findToken(String word) {
-        for (Map.Entry<Token, List<String>> t : token.entrySet()) {
-            if (t.getValue().contains(word)) {
-                return t.getKey();
-            }
-        }
-        return null;
-    }
 }
