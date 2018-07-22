@@ -10,10 +10,7 @@ import lombok.Setter;
 import object.quality_interface.Connector;
 import object.quality_interface.Container;
 import process.Response;
-import util.CardinalDirection;
-import util.Direction;
-import util.AdvStringBuilder;
-import util.RelativeDirection;
+import util.*;
 
 /**
  * Created by Herta on 18.01.2018.
@@ -22,7 +19,6 @@ import util.RelativeDirection;
 @Getter
 public class Scene extends AbstractAdvObject implements Container {
     // Connected scenes, like other rooms, part of other rooms or desk
-    // private List<Scene> connected;
     // Connected connectors like doors or path
     private Map<Connector, Direction> direction;
     private Map<Connector, Scene> links;
@@ -30,16 +26,17 @@ public class Scene extends AbstractAdvObject implements Container {
     private Set<Item> contents;
 
     public Scene(String name) {
-        super(name);
+        this(name, name);
+    }
+
+    public Scene(String name, String label) {
+        super(name, label);
         this.direction = new HashMap<>();
         this.links = new HashMap<>();
         this.contents = new HashSet<>();
         executable.add(BaseAction.GO);
         executable.add(BaseAction.LOOK);
-    }
-    @Override
-    protected void build(){
-        super.build();
+        this.definingIDType = IDType.DIRECTION;
         this.description = "You are in the " + this.getLabel() + ". ";
     }
 
@@ -53,9 +50,14 @@ public class Scene extends AbstractAdvObject implements Container {
     }
 
     @Override
+    public Response respondPossibleAction() {
+        return new Response( AdvStringBuilder.enumerate("You can", this.executable, "the " + this.label), true);
+    }
+
+    @Override
     public Response look() {
         if (this.executable.contains(BaseAction.LOOK)) {
-            String output = this.description + "\n";
+            String output = this.description + '\n';
 
             if (!this.direction.isEmpty()) {
                 Map<Connector, String> detail = new HashMap<>();

@@ -49,6 +49,8 @@ public enum Routine implements OnePredicateAction {
                 return BaseAction.PULL.exec(game, o);
             } else if (o instanceof Pushable) {
                 return BaseAction.PUSH.exec(game, o);
+            } else if (o instanceof Scene) {
+                return BaseAction.GO.exec(game, o);
             } else {
                 return o.respondNegative(Routine.MOVE);
             }

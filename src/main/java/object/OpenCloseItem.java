@@ -20,23 +20,12 @@ public abstract class OpenCloseItem extends Item implements Openable, Closable, 
     @Getter protected boolean locked;
     @Getter protected Key key;
 
-    public OpenCloseItem(@NonNull String name) {
-        super(name);
-        this.closed = false;
-        this.locked = true;
-    }
-
     public OpenCloseItem(@NonNull String name, @NonNull String label, boolean closed, boolean locked) {
         super(name, label);
         this.closed = closed;
         this.locked = locked;
-    }
-
-    @Override
-    protected void build() {
-        super.build();
-        this.executable.add(BaseAction.CLOSE);
         this.executable.add(BaseAction.OPEN);
+        this.executable.add(BaseAction.CLOSE);
     }
 
     @Override

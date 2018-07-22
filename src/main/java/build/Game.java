@@ -37,7 +37,7 @@ public class Game {
     }
 
     public Response respondLocation() {
-        this.response.setOutput("You are in the " + this.location.getLabel());
+        this.response.setOutput("You are in the " + this.location.getLabel() + ". ");
         this.response.setSuccess(true);
         return this.response;
     }

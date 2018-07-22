@@ -28,7 +28,7 @@ public class English extends Language{
         token.put(Routine.MOVE, Arrays.asList("move"));
 
         token.put(Status.INVENTORY, Arrays.asList("inventory", "bag", "my things", "what carry"));
-        token.put(Status.LOCATION, Arrays.asList("location", "where I"));
+        token.put(Status.LOCATION, Arrays.asList("location", "where i"));
 
         token.put(BaseControl.HELP, Arrays.asList("help"));
         token.put(BaseControl.EXIT, Arrays.asList("exit"));

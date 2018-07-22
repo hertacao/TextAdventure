@@ -35,7 +35,6 @@ public class Parser {
         this.game = game;
         sc = new Scanner(System.in);
         this.last_obj = game.getLocation();
-        this.input = new LinkedList<>();
         this.action = new LinkedList<>();
         this.control = new LinkedList<>();
         this.object = new LinkedList<>();
@@ -89,7 +88,11 @@ public class Parser {
                         if (label.isEmpty()) {
                             return new InvalidMultipleObjectRequest(this.input, (Action) this.last_com, this.object);
                         } else if (id_object.isEmpty()) {
-                            return new InvalidUnclearLabelRequest(this.input, (Action) this.last_com, label.keySet());
+                            if (Collections.disjoint(label.keySet(), this.last_obj.getReference())) {
+                                return new InvalidUnclearLabelRequest(this.input, (Action) this.last_com, label.keySet());
+                            } else {
+                                return new OnePredicateRequest(this.input, (OnePredicateAction) this.last_com, this.last_obj);
+                            }
                         } else {
                             this.last_obj = id_object.get(0);
                             return new OnePredicateRequest(this.input, (OnePredicateAction) this.last_com, id_object.get(0));
@@ -134,7 +137,11 @@ public class Parser {
                         if (label.isEmpty()) {
                             return new InvalidMultipleObjectRequest(this.input, this.action.getFirst(), this.object);
                         } else if (id_object.isEmpty()) {
-                            return new InvalidUnclearLabelRequest(this.input, this.action.getFirst(), label.keySet());
+                            if (Collections.disjoint(label.keySet(), this.last_obj.getReference())) {
+                                return new InvalidUnclearLabelRequest(this.input, (Action) this.last_com, label.keySet());
+                            } else {
+                                return new OnePredicateRequest(this.input, (OnePredicateAction) this.action.getFirst(), this.last_obj);
+                            }
                         } else {
                             this.last_obj = id_object.get(0);
                             return new OnePredicateRequest(this.input, (OnePredicateAction) this.action.getFirst(), id_object.get(0));
@@ -169,13 +176,8 @@ public class Parser {
     }
 
     private void tokenize() {
-        this.input.clear();
-        String line = sc.nextLine();
-        Scanner tokenizer = new Scanner(line);
-        while(tokenizer.hasNext()) {
-            this.input.add(tokenizer.next());
-        }
-        tokenizer.close();
+        String line = sc.nextLine().toLowerCase();
+        this.input = Arrays.asList(line.split(" "));
     }
     
     private void classify(List<String> input) {
@@ -196,12 +198,7 @@ public class Parser {
                             });
 
         }
-
-        this.object = this.searchObject(input);
-    }
-
-    private LinkedList<AdvObject> searchObject(List<String> input) {
-        return game.getReachable().stream().filter(o -> input.contains(o.getLabel())).collect(Collectors.toCollection(LinkedList::new));
+        this.object = game.getReachable().stream().filter(o -> !Collections.disjoint(input, o.getReference())).collect(Collectors.toCollection(LinkedList::new));
     }
 
     private LinkedList<Direction> searchDirection(List<String> input) {

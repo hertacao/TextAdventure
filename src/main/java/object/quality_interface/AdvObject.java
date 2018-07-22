@@ -6,12 +6,14 @@ import util.IDType;
 import util.Token;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public interface AdvObject extends Token {
     Integer getId();
-    String getLabel();
     String getName();
+    String getLabel();
+    List<String> getReference();
     String getDescription();
     String getLong_description();
     LinkedList<Action> getExecutable();

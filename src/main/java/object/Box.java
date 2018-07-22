@@ -4,6 +4,7 @@ import command.BaseAction;
 import lombok.Getter;
 import lombok.Setter;
 import object.quality_interface.Container;
+import object.quality_interface.Lockable;
 import process.Response;
 
 import java.util.Set;
@@ -13,12 +14,13 @@ import java.util.Set;
  */
 @Getter
 @Setter
-public class Box extends OpenCloseItem implements Container {
+public class Box extends OpenCloseItem implements Container, Lockable {
     private Set<Item> contents;
 
     public Box(String name, String label, Set<Item> contents, boolean opened, boolean locked) {
         super(name, label, opened, locked);
         this.contents = contents;
+        this.reference.add("box");
     }
 
     public void addContent (Item item) {

@@ -12,10 +12,10 @@ import object.action_inferface.Lookable;
 import object.quality_interface.AdvObject;
 import process.Response;
 import util.IDType;
-import util.Token;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -29,48 +29,36 @@ public abstract class AbstractAdvObject implements AdvObject, Lookable, Examinab
     protected String name;
     // printed name for player
     protected String label;
+    // List of alternative String referring to this object
+    protected List<String> reference;
     protected String description;
     protected String long_description;
+    // list of Actions that can be performed on this object
     protected LinkedList<Action> executable;
+    // Response created by object
     protected Response response;
+    // how this object is identified when there are multiple objects with same label
     protected IDType definingIDType;
 
     // Custom responses of this object to an action
     protected Map<Action, String> pos_output = new HashMap<>();
     protected Map<Action, String> neg_output = new HashMap<>();
 
-    public AbstractAdvObject(@NonNull String name) {
-        this.name = name;
-        this.label = name;
-        this.build();
-    }
-
     public AbstractAdvObject(@NonNull String name, @NonNull String label) {
         this.name = name;
         this.label = label;
-        this.build();
-    }
-
-    protected void build(){
-        this.description = "This is a " + this.getLabel() + ". ";
+        this.description = "This is a " + this.label + ". ";
         this.executable = new LinkedList<>();
         this.response = new Response();
         this.executable.add(BaseAction.LOOK);
         this.executable.add(BaseAction.EXAMINE);
         this.executable.add(BaseAction.GO);
+        this.reference = new LinkedList<>();
+        this.reference.add(label);
         this.definingIDType = IDType.NONE;
     }
 
-    public Response respondPossibleAction() {
-        StringBuilder output = new StringBuilder("You can ");
-        for (Action a : this.executable) {
-            output.append(a.toString());
-            output.append(", ");
-        }
-        output.append("it. ");
-        this.response.setOutput(output.toString());
-        return this.response;
-    }
+    public abstract Response respondPossibleAction();
 
     /**
      * Sets positive Response for a given action and if a specified string

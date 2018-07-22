@@ -13,5 +13,6 @@ public class Button extends PushItem {
         this.positions.add("on");
         this.reachables.add("off");
         this.reachables.add("off");
+        this.reference.add("button");
     }
 }

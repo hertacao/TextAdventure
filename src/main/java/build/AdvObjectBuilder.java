@@ -2,6 +2,7 @@ package build;
 
 import lombok.Getter;
 import object.Door;
+import object.Room;
 import object.Scene;
 import object.quality_interface.Connector;
 import util.RelativeDirection;
@@ -14,13 +15,13 @@ public class AdvObjectBuilder {
     private LinkedList<Connector> connectors = new LinkedList<>();
 
     public void build() {
-        Scene floor = new Scene("floor");
+        Room floor = new Room("floor");
         scenes.add(floor);
-        Scene livingroom = new Scene("living room");
+        Room livingroom = new Room("living room");
         scenes.add(livingroom);
-        Scene bathroom = new Scene("bathroom");
+        Room bathroom = new Room("bathroom");
         scenes.add(bathroom);
-        Scene bedroom = new Scene("bedroom");
+        Room bedroom = new Room("bedroom");
         scenes.add(bedroom);
 
         Door door_bath = new Door("DoorBathroom", floor, bathroom);
