@@ -22,6 +22,6 @@ public class InvalidMultipleCommandRequest extends Request {
 
     @Override
     public Response invoke(Game game, Object... args) {
-        return new Response( AdvStringBuilder.enumerateCommand("You entered more than one command which are ", this.command, "Please specify which command you like to use"), false);
+        return new Response( AdvStringBuilder.enumerate("You entered more than one command which are", this.command, "Please specify which command you like to use."), false);
     }
 }

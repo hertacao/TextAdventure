@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import language.Article;
 import language.Language;
+import object.quality_interface.AdvObject;
 
 import java.util.Collection;
 import java.util.Map;
@@ -17,11 +18,19 @@ public class AdvStringBuilder {
     @Getter
     private static @NonNull Language language;
 
-    public static String enumerate (String start,
-                             @NonNull Collection<?> objects,
-                             Map<?, ?> detail,
+    public static <T> String enumerate (String start,
+                             @NonNull Collection<T> objects,
+                             Map<T, ?> detail,
                              String end, Object... args ) {
-        Article article = Article.INDEFINITE;
+
+        Article article;
+
+        if(AdvObject.class.isAssignableFrom(objects.stream().findAny().getClass())) {
+            article = Article.INDEFINITE;
+        } else {
+            article = Article.NONE;
+        }
+
         if (args.length != 0 && args[0] instanceof Article) {
             article = (Article) args[0];
         }
@@ -34,22 +43,38 @@ public class AdvStringBuilder {
             output = new java.lang.StringBuilder();
         }
 
-        if (detail != null) {
-            for (Object o : objects) {
-                output.append(", ");
-                output.append(language.getArticle(o.toString(), article));
-                output.append(" ");
-                output.append(o.toString());
-                output.append(" ");
-                output.append(detail.get(o).toString());
-
+        if (article == Article.NONE) {
+            if(detail != null) {
+                for (T o : objects) {
+                    output.append(", ");
+                    output.append(o.toString());
+                    output.append(" ");
+                    output.append(detail.get(o).toString());
+                }
+            } else {
+                for (T o : objects) {
+                    output.append(", ");
+                    output.append(o.toString());
+                }
             }
         } else {
-            for (Object o : objects) {
-                output.append(", ");
-                output.append(language.getArticle(o.toString(), article));
-                output.append(" ");
-                output.append(o.toString());
+            if (detail != null) {
+                for (T o : objects) {
+                    output.append(", ");
+                    output.append(language.getArticle(o.toString(), article));
+                    output.append(" ");
+                    output.append(o.toString());
+                    output.append(" ");
+                    output.append(detail.get(o).toString());
+
+                }
+            } else {
+                for (T o : objects) {
+                    output.append(", ");
+                    output.append(language.getArticle(o.toString(), article));
+                    output.append(" ");
+                    output.append(o.toString());
+                }
             }
         }
 
@@ -71,34 +96,19 @@ public class AdvStringBuilder {
         return output.toString();
     }
 
-    public static String enumerate (String start, @NonNull Collection<?> objects, String end, Object... args) {
+    public static <T> String enumerate (String start, @NonNull Collection<T> objects, String end, Object... args) {
         return enumerate(start,objects,null,end, args);
     }
 
-    public static String enumerate (String start, @NonNull Collection<?> objects, Object... args) {
+    public static <T> String enumerate (String start, @NonNull Collection<T> objects, Object... args) {
         return enumerate(start,objects,null,null, args);
     }
 
-    public static String enumerate (@NonNull Collection<?> objects, String end, Object... args) {
+    public static <T> String enumerate (@NonNull Collection<T> objects, String end, Object... args) {
         return enumerate(null,objects,null,end, args);
     }
 
-    public static String enumerate (@NonNull Collection<?> objects, Object... args) {
+    public static <T> String enumerate (@NonNull Collection<T> objects, Object... args) {
         return enumerate(null,objects,null,null, args);
-    }
-
-    public static String enumerateCommand (String start, @NonNull Collection<? extends Command> command, String end) {
-        java.lang.StringBuilder output = new java.lang.StringBuilder(start);
-        for (Command c : command) {
-            output.append(c.toString());
-            output.append(", ");
-        }
-        output.append(". ");
-        output.append(end);
-        return output.toString();
-    }
-
-    public static String getArticle (String label, Article article_type) {
-        return language.getArticle(label, article_type);
     }
 }

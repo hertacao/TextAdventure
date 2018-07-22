@@ -11,9 +11,5 @@ import java.util.List;
 public abstract class Request{
     // tokenized input
     @NonNull protected List<String> input;
-
-    public Response invoke(Game game, Object... args) {
-        return null;
-    }
-
+    public abstract Response invoke(Game game, Object... args);
 }

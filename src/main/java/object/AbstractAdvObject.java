@@ -21,7 +21,7 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class AbstractAdvObject implements AdvObject, Lookable, Examinable, Goable, Token {
+public abstract class AbstractAdvObject implements AdvObject, Lookable, Examinable, Goable {
 
     // unique identifier
     protected Integer id;

@@ -54,6 +54,7 @@ public class Parser {
             List<Token> token = new LinkedList<>();
             token.addAll(this.control);
             token.addAll(this.action);
+            token.addAll(this.object);
             token.remove(BaseControl.HELP);
             this.last_com = BaseControl.HELP;
             return new HelpRequest(input, token);
@@ -180,15 +181,22 @@ public class Parser {
     private void classify(List<String> input) {
         this.action.clear();
         this.control.clear();
-        input.stream().map(w -> this.language.findToken(w))
-        .forEach(
-                t -> {
-                    if (t instanceof Action) {
-                        this.action.add((Action) t);
-                    } else if (t instanceof Control) {
-                        this.control.add((Control) t);
-                    }
-        });
+
+        for (Map.Entry<Token, List<String>> token : this.language.getToken().entrySet()) {
+            token.getValue().stream().map(str -> Arrays.asList(str.split(" ")))
+                    .forEach(
+                            w -> {
+                                if (input.containsAll(w)) {
+                                    if (token.getKey() instanceof Action) {
+                                        this.action.add((Action) token.getKey());
+                                    } else if (token.getKey() instanceof Control) {
+                                        this.control.add((Control) token.getKey());
+                                    }
+                                }
+                            });
+
+        }
+
         this.object = this.searchObject(input);
     }
 

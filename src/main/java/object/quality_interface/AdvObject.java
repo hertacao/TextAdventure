@@ -3,11 +3,12 @@ package object.quality_interface;
 import command.Action;
 import process.Response;
 import util.IDType;
+import util.Token;
 
 import java.util.LinkedList;
 import java.util.Map;
 
-public interface AdvObject {
+public interface AdvObject extends Token {
     Integer getId();
     String getLabel();
     String getName();

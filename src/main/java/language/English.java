@@ -17,7 +17,7 @@ public class English extends Language{
         token.put(BaseAction.CLOSE, Arrays.asList("close"));
         token.put(BaseAction.PUSH, Arrays.asList("push"));
         token.put(BaseAction.PULL, Arrays.asList("pull"));
-        token.put(BaseAction.GO, Arrays.asList("go", "walk"));
+        token.put(BaseAction.GO, Arrays.asList("go to", "walk"));
         token.put(BaseAction.TALK, Arrays.asList("talk"));
 
         token.put(Action2P.USE, Arrays.asList("use", "turn"));
