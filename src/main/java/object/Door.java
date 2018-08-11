@@ -26,6 +26,10 @@ public class Door extends OpenCloseItem implements Connector, Lockable {
         this.reference.add("door");
     }
 
+    public Door(String name, Scene scene1, Scene scene2, boolean closed, boolean locked) {
+        this(name, "door", scene1, scene2, closed, locked);
+    }
+
     public Door(String name, Scene scene1, Scene scene2) {
         this(name, "door", scene1, scene2, true, false);
     }

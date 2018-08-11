@@ -1,6 +1,5 @@
 package util;
 
-import command.Command;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +8,7 @@ import language.Article;
 import language.Language;
 import object.quality_interface.AdvObject;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -17,6 +17,43 @@ public class AdvStringBuilder {
     @Setter
     @Getter
     private static @NonNull Language language;
+
+    public static String getString (Object o) {
+        return o.toString();
+    }
+
+    public static String getString (Word w) {
+        return language.getStrings().get(w);
+    }
+
+    public static String getString (Token t) {
+        return language.getToken().get(t).get(0);
+    }
+
+    // support for german is missing
+    public static String getString (Article a) {
+        return language.getArticle("", a);
+    }
+
+    public static String buildSentence (Object... objects) {
+        StringBuilder output = new StringBuilder();
+        Arrays.stream(objects)
+                .forEach(o -> {
+                    if(o instanceof Token) {
+                        output.append(AdvStringBuilder.getString((Token) o));
+                    } else if (o instanceof Word) {
+                        output.append(AdvStringBuilder.getString((Word) o));
+                    } else if (o instanceof Article) {
+                        output.append(AdvStringBuilder.getString((Article) o));
+                    } else {
+                        output.append(AdvStringBuilder.getString(o));
+                    }
+                    output.append(" ");
+                });
+        output.setCharAt(0, Character.toUpperCase(output.charAt(0)));
+        output.insert(output.length()-1, ".");
+        return output.toString();
+    }
 
     public static <T> String enumerate (String start,
                              @NonNull Collection<T> objects,
@@ -35,12 +72,12 @@ public class AdvStringBuilder {
             article = (Article) args[0];
         }
 
-        java.lang.StringBuilder output;
+        StringBuilder output;
         if (start != null) {
-            output = new java.lang.StringBuilder(start);
+            output = new StringBuilder(start);
             output.append(" ");
         } else {
-            output = new java.lang.StringBuilder();
+            output = new StringBuilder();
         }
 
         if (article == Article.NONE) {

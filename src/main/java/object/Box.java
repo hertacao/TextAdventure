@@ -17,8 +17,8 @@ import java.util.Set;
 public class Box extends OpenCloseItem implements Container, Lockable {
     private Set<Item> contents;
 
-    public Box(String name, String label, Set<Item> contents, boolean opened, boolean locked) {
-        super(name, label, opened, locked);
+    public Box(String name, String label, Set<Item> contents, boolean closed, boolean locked) {
+        super(name, label, closed, locked);
         this.contents = contents;
         this.reference.add("box");
     }

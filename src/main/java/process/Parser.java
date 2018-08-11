@@ -194,7 +194,7 @@ public class Parser {
                     .forEach(string_list -> keywords.put(string_list, token.getKey()));
         }
 
-        System.out.println(keywords);
+        //System.out.println(keywords);
 
         for (Map.Entry<List<String>, Token> keyword : keywords.entrySet()) {
             map = new HashMap<>(keywords);

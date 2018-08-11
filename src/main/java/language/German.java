@@ -1,6 +1,7 @@
 package language;
 
 import util.Token;
+import util.Word;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,10 +11,15 @@ public class German extends Language{
     private Map<String, String> indef_articles = new HashMap<>();
     private Map<String, String> def_articles = new HashMap<>();
     private Map<String, String> relpron_articles = new HashMap<>();
-    private Map<String, Token> token = new HashMap<>();
 
     @Override
-    protected Map<Token, List<String>> createMap() {
+    protected Map<Token, List<String>> createToken() {
+        // please complete
+        return null;
+    }
+
+    @Override
+    protected Map<Word, String> createStrings() {
         // please complete
         return null;
     }

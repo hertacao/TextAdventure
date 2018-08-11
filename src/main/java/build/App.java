@@ -1,5 +1,6 @@
 package build;
 
+import command.*;
 import process.*;
 import process.request.Request;
 import util.AdvStringBuilder;
@@ -17,9 +18,9 @@ public class App {
     }
 
     public static void main(String[] args) {
-        Mode mode = Mode.DEBUG;
+        Mode mode = Mode.NORMAL;
         Language language = new English();
-        AdvStringBuilder.setLanguage(new English());
+        AdvStringBuilder.setLanguage(language);
         AdvObjectBuilder builder = new AdvObjectBuilder();
         builder.build();
 

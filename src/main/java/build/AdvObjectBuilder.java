@@ -17,7 +17,7 @@ public class AdvObjectBuilder {
     private LinkedList<Connector> connectors = new LinkedList<>();
 
     public void build() {
-        Room floor = new Room("floor");
+        Room floor = new Room("hallway");
         scenes.add(floor);
         Room livingroom = new Room("living room");
         scenes.add(livingroom);
@@ -30,7 +30,7 @@ public class AdvObjectBuilder {
         connectors.add(door_bath);
         Door door_living = new Door("DoorLivingRoom", floor, livingroom);
         connectors.add(door_living);
-        Door door_bed = new Door("DoorBedroom", livingroom, bedroom);
+        Door door_bed = new Door("DoorBedroom", livingroom, bedroom, true, true);
         connectors.add(door_bed);
 
         floor.addConnector(door_living, RelativeDirection.FRONT, livingroom);

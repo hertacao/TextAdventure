@@ -4,6 +4,7 @@ package object;
  * Created by Herta on 18.01.2018.
  */
 
+import language.Article;
 import lombok.*;
 import command.*;
 import object.action_inferface.Examinable;
@@ -11,7 +12,9 @@ import object.action_inferface.Goable;
 import object.action_inferface.Lookable;
 import object.quality_interface.AdvObject;
 import process.Response;
+import util.AdvStringBuilder;
 import util.IDType;
+import util.Word;
 
 import java.util.*;
 
@@ -70,7 +73,7 @@ public abstract class AbstractAdvObject implements AdvObject, Lookable, Examinab
         } else if (output.length != 0) {
             this.response.setOutput(output[0]);
         } else {
-            this.response.setOutput(act.pos_output() + this.getLabel() + ". ");
+            this.response.setOutput(AdvStringBuilder.buildSentence(Word.YOU, act, Article.DEFINITE, this.getLabel()));
         }
 
         return this.response;
@@ -89,7 +92,7 @@ public abstract class AbstractAdvObject implements AdvObject, Lookable, Examinab
         } else if (output.length != 0) {
             this.response.setOutput(output[0]);
         } else {
-            this.response.setOutput(act.neg_output() + this.getLabel() + ". ");
+            this.response.setOutput(AdvStringBuilder.buildSentence(Word.YOU, Word.CANNOT, act, Article.DEFINITE, this.getLabel()));
         }
 
         return this.response;

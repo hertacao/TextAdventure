@@ -4,13 +4,14 @@ import command.*;
 import util.CardinalDirection;
 import util.RelativeDirection;
 import util.Token;
+import util.Word;
 
 import java.util.*;
 
 public class English extends Language{
 
     @Override
-    protected Map<Token, List<String>> createMap() {
+    public Map<Token, List<String>> createToken() {
         Map<Token, List<String>> token = new HashMap<>();
         token.put(RelativeDirection.RIGHT, Arrays.asList("right"));
         token.put(RelativeDirection.LEFT, Arrays.asList("left"));
@@ -54,13 +55,12 @@ public class English extends Language{
         return token;
     }
 
-    public boolean addToken (Token t, String... strings) {
-        if (token.containsKey(t)) {
-            token.get(t).addAll(Arrays.asList(strings));
-            return true;
-        } else {
-            return false;
-        }
+    @Override
+    public Map<Word, String> createStrings() {
+        Map<Word, String> strings = new HashMap<>();
+        strings.put(Word.YOU, "you");
+        strings.put(Word.CANNOT, "can't");
+        return strings;
     }
 
     public String getArticle(String label, Article article_type) {
