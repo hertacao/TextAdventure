@@ -1,12 +1,11 @@
 package build;
 
 import lombok.Getter;
-import object.AbstractAdvObject;
 import object.Door;
 import object.Room;
 import object.Scene;
-import object.quality_interface.AdvObject;
-import object.quality_interface.Connector;
+import object.interfaces.AdvObject;
+import object.interfaces.Connector;
 import util.RelativeDirection;
 
 import java.util.LinkedList;

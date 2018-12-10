@@ -2,6 +2,7 @@ package object;
 
 import process.Response;
 import util.AdvStringBuilder;
+import util.Token;
 
 /**
  * Created by Herta on 22.01.2018.
@@ -12,6 +13,6 @@ public abstract class Item extends AbstractAdvObject {
 
     @Override
     public Response respondPossibleAction() {
-        return new Response( AdvStringBuilder.enumerate("You can", this.executable, "this " + this.label), true);
+        return new Response(true, AdvStringBuilder.enumerate("You can", this.executable, "this " + this.label));
     }
 }

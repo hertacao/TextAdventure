@@ -1,5 +1,5 @@
 package util;
 
 public enum Word {
-    YOU, CANNOT,
+    YOU, CAN, CANNOT, WITH
 }

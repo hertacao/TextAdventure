@@ -4,7 +4,7 @@ import build.Game;
 import command.Action;
 import lombok.NonNull;
 import lombok.ToString;
-import object.quality_interface.AdvObject;
+import object.interfaces.AdvObject;
 import process.Response;
 import util.AdvStringBuilder;
 

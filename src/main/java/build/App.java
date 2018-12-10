@@ -14,31 +14,35 @@ public class App {
 
     public enum Mode {
         NORMAL,
-        DEBUG
+        DEBUG,
+        TEST
     }
 
     public static void main(String[] args) {
-        Mode mode = Mode.NORMAL;
+        Mode mode = Mode.DEBUG;
         Language language = new English();
         AdvStringBuilder.setLanguage(language);
-        AdvObjectBuilder builder = new AdvObjectBuilder();
-        builder.build();
+        AdvObjectBuilder objectBuilder = new AdvObjectBuilder();
+        objectBuilder.build();
 
         if(mode == Mode.DEBUG) {
-            System.out.println(builder.toString());
+            System.out.println(objectBuilder.toString());
             System.out.println("============================================");
         }
 
-        Game game = new Game(builder.getScenes().getFirst());
+        Game game = new Game(objectBuilder.getScenes().getFirst());
         game.setRunning(true);
         Executer executer = new Executer();
         Parser parser = new Parser(language, executer, game);
+        Builder builder = new Builder();
 
         System.out.println("Welcome to a new adventure!");
 
         while(game.isRunning()) {
-            Request request = parser.buildRequest();
+            InternalMessage im = parser.parse();
+            Request request = builder.buildRequest(im);
             Response response = executer.invokeRequest(request, game);
+
             System.out.println(response.toString());
 
             if(mode == Mode.DEBUG) {

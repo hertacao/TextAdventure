@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import language.Article;
 import language.Language;
-import object.quality_interface.AdvObject;
+import object.interfaces.AdvObject;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,11 +23,11 @@ public class AdvStringBuilder {
     }
 
     public static String getString (Word w) {
-        return language.getStrings().get(w);
+        return language.getWordMap().get(w);
     }
 
     public static String getString (Token t) {
-        return language.getToken().get(t).get(0);
+        return language.getTokenMap().get(t).get(0);
     }
 
     // support for german is missing
@@ -35,11 +35,13 @@ public class AdvStringBuilder {
         return language.getArticle("", a);
     }
 
-    public static String buildSentence (Object... objects) {
+    private static String enumerate(Object... objects) {
         StringBuilder output = new StringBuilder();
         Arrays.stream(objects)
                 .forEach(o -> {
-                    if(o instanceof Token) {
+                    if(o instanceof Iterable) {
+                        output.append(AdvStringBuilder.enumerate(o));
+                    } else if(o instanceof Token) {
                         output.append(AdvStringBuilder.getString((Token) o));
                     } else if (o instanceof Word) {
                         output.append(AdvStringBuilder.getString((Word) o));
@@ -50,6 +52,12 @@ public class AdvStringBuilder {
                     }
                     output.append(" ");
                 });
+        return output.toString();
+    }
+
+    public static String buildSentence (Object... objects) {
+        StringBuilder output = new StringBuilder();
+        output.append(AdvStringBuilder.enumerate(objects));
         output.setCharAt(0, Character.toUpperCase(output.charAt(0)));
         output.insert(output.length()-1, ".");
         return output.toString();

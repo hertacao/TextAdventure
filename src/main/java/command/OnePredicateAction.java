@@ -1,7 +1,7 @@
 package command;
 
 import lombok.NonNull;
-import object.quality_interface.AdvObject;
+import object.interfaces.AdvObject;
 import process.Response;
 import build.Game;
 

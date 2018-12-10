@@ -3,7 +3,7 @@ package process.request;
 import build.Game;
 import command.TwoPredicateAction;
 import lombok.ToString;
-import object.quality_interface.AdvObject;
+import object.interfaces.AdvObject;
 import process.Response;
 
 import java.util.List;

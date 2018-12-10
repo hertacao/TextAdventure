@@ -2,30 +2,33 @@ package command;
 
 import build.Game;
 import lombok.NonNull;
-import object.Door;
 import object.Scene;
 import object.action_inferface.Pullable;
 import object.action_inferface.Pushable;
-import object.quality_interface.AdvObject;
+import object.interfaces.AdvObject;
+import object.interfaces.Connector;
 import process.Response;
 import util.AdvStringBuilder;
 
 import java.util.List;
 
+/**
+ * The idea of routines is a sequence of actions that are often performed after another.
+ */
 public enum Routine implements OnePredicateAction {
     ENTER {
         public Response exec(Game game, @NonNull AdvObject o) {
-            if (o instanceof Door) {
-                // Check if door is already open
-                if (!((Door) o).isClosed()) {
-                    List<Scene> scene = ((Door) o).getScenes();
+            if (o instanceof Connector) {
+                // Check if connector is already passable
+                if (((Connector) o).isPassable()) {
+                    List<Scene> scene = ((Connector) o).getScenes();
                     scene.remove(game.getLocation());
                     BaseAction.GO.exec(game, scene.get(0));
                     return o.respondPositive(Routine.ENTER);
                 }
                 Response response = BaseAction.OPEN.exec(game, o);
-                if (!((Door) o).isClosed()) {
-                    List<Scene> scene = ((Door) o).getScenes();
+                if (((Connector) o).isPassable()) {
+                    List<Scene> scene = ((Connector) o).getScenes();
                     scene.remove(game.getLocation());
                     BaseAction.GO.exec(game, scene.get(0));
                     return o.respondPositive(Routine.ENTER, "You open the door and enter the room. ");
@@ -38,9 +41,9 @@ public enum Routine implements OnePredicateAction {
     },
     MOVE {
         public Response exec(Game game, @NonNull AdvObject o) {
-            if (o instanceof Pullable) {
+            if (o.canExecute(BaseAction.PULL)) {
                 return BaseAction.PULL.exec(game, o);
-            } else if (o instanceof Pushable) {
+            } else if (o.canExecute(BaseAction.PUSH)) {
                 return BaseAction.PUSH.exec(game, o);
             } else if (o instanceof Scene) {
                 return BaseAction.GO.exec(game, o);

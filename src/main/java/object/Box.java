@@ -3,29 +3,39 @@ package object;
 import command.BaseAction;
 import lombok.Getter;
 import lombok.Setter;
-import object.quality_interface.Container;
-import object.quality_interface.Lockable;
 import process.Response;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Herta on 22.01.2018.
  */
 @Getter
 @Setter
-public class Box extends OpenCloseItem implements Container, Lockable {
-    private Set<Item> contents;
+public class Box extends Container {
 
-    public Box(String name, String label, Set<Item> contents, boolean closed, boolean locked) {
-        super(name, label, closed, locked);
-        this.contents = contents;
+    public Box(String name, String label, boolean closed, boolean locked) {
+        super(name, label);
+
         this.reference.add("box");
     }
 
-    public void addContent (Item item) {
-        this.contents.add(item);
+    private void createContentNameMap() {
+        for (Item item: this.contents) {
+            for (String name : item.getReference() ) {
+                if (this.contentNameMap.containsKey(name)) {
+                    this.contentNameMap.get(name).add(item);
+                } else {
+                    this.contentNameMap.put(name, Arrays.asList(item));
+                }
+            }
+        }
     }
+
+    public boolean isContentAccessible() {
+        return !this.closed;
+    }
+
 
     @Override
     public Response look() {

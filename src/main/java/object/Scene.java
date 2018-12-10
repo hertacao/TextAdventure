@@ -7,8 +7,7 @@ import java.util.stream.Collectors;
 import command.BaseAction;
 import lombok.Getter;
 import lombok.Setter;
-import object.quality_interface.Connector;
-import object.quality_interface.Container;
+import object.interfaces.Connector;
 import process.Response;
 import util.*;
 
@@ -17,13 +16,11 @@ import util.*;
  */
 @Setter
 @Getter
-public class Scene extends AbstractAdvObject implements Container {
+public class Scene extends Container {
     // Connected scenes, like other rooms, part of other rooms or desk
     // Connected connectors like doors or path
-    private Map<Connector, Direction> direction;
-    private Map<Connector, Scene> links;
-    // Contained items, like keys, ..
-    private Set<Item> contents;
+    protected Map<Connector, Direction> directionMap;
+    protected Map<Connector, Scene> sceneMap;
 
     public Scene(String name) {
         this(name, name);
@@ -31,27 +28,43 @@ public class Scene extends AbstractAdvObject implements Container {
 
     public Scene(String name, String label) {
         super(name, label);
-        this.direction = new HashMap<>();
-        this.links = new HashMap<>();
-        this.contents = new HashSet<>();
+        this.directionMap = new HashMap<>();
+        this.sceneMap = new HashMap<>();
         executable.add(BaseAction.GO);
         executable.add(BaseAction.LOOK);
-        this.definingIDType = IDType.DIRECTION;
         this.description = "You are in the " + this.getLabel() + ". ";
     }
 
-    public void addConnector(Connector connector, Direction direction, Scene scene) {
-        this.direction.put(connector, direction);
-        this.links.put(connector, scene);
+    public void addConnector (Connector connector, Direction direction, Scene scene) {
+        this.directionMap.put(connector, direction);
+        this.sceneMap.put(connector, scene);
     }
 
-    public void addContent (Item item) {
-        this.contents.add(item);
+    private void createContentNameMap() {
+        for (Item i: this.contents) {
+            for (String name : i.getReference()) {
+                if (this.contentNameMap.containsKey(name)) {
+                    this.contentNameMap.get(name).add(i);
+                } else {
+                    this.contentNameMap.put(name, Arrays.asList(i));
+                }
+            }
+        }
     }
 
-    @Override
-    public Response respondPossibleAction() {
-        return new Response( AdvStringBuilder.enumerate("You can", this.executable, "the " + this.label), true);
+    public boolean isContentAccessible() {
+        return true;
+    }
+
+
+    public List<Scene> getReachableScene() {
+        List<Scene> reachableScene = new ArrayList<>();
+        for(Map.Entry<Connector,Scene> link : this.sceneMap.entrySet()) {
+            if(link.getKey().isPassable()) {
+                reachableScene.add(link.getValue());
+            }
+        }
+        return reachableScene;
     }
 
     @Override
@@ -59,9 +72,9 @@ public class Scene extends AbstractAdvObject implements Container {
         if (this.executable.contains(BaseAction.LOOK)) {
             String output = this.description + '\n';
 
-            if (!this.direction.isEmpty()) {
+            if (!this.directionMap.isEmpty()) {
                 Map<Connector, String> detail = new HashMap<>();
-                direction.forEach((c, d) -> {
+                directionMap.forEach((c, d) -> {
                             if (d instanceof CardinalDirection) {
                                 detail.put(c, "facing " + d.toString());
                             } else if (d.equals(RelativeDirection.FRONT)) {
@@ -73,7 +86,7 @@ public class Scene extends AbstractAdvObject implements Container {
                             }
                         }
                 );
-                output += AdvStringBuilder.enumerate("There is", direction.keySet(), detail, null);
+                output += AdvStringBuilder.enumerate("There is", directionMap.keySet(), detail, null);
             }
 
             if (!this.contents.isEmpty()) {

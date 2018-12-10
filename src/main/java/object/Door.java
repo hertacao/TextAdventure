@@ -2,9 +2,7 @@ package object;
 
 import lombok.Getter;
 import lombok.Setter;
-import object.quality_interface.Connector;
-import object.quality_interface.Lockable;
-import util.IDType;
+import object.interfaces.Connector;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,26 +12,25 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class Door extends OpenCloseItem implements Connector, Lockable {
+public class Door extends OpenCloseItem implements Connector {
     private Scene scene1;
     private Scene scene2;
 
-    public Door(String name, String label, Scene scene1, Scene scene2, boolean closed, boolean locked) {
-        super(name, label, closed, locked);
+    public Door(String name, String label, Scene scene1, Scene scene2) {
+        super(name, label);
         this.scene1 = scene1;
         this.scene2 = scene2;
-        this.definingIDType = IDType.DIRECTION;
         this.reference.add("door");
     }
 
-    public Door(String name, Scene scene1, Scene scene2, boolean closed, boolean locked) {
-        this(name, "door", scene1, scene2, closed, locked);
-    }
-
     public Door(String name, Scene scene1, Scene scene2) {
-        this(name, "door", scene1, scene2, true, false);
+        this(name, name, scene1, scene2);
     }
 
+    @Override
+    public boolean isPassable() {
+        return this.isOpen();
+    }
 
     @Override
     public List<Scene> getScenes() {

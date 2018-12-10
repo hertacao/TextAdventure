@@ -2,9 +2,10 @@ package build;
 
 import lombok.Getter;
 import lombok.Setter;
-import object.quality_interface.AdvObject;
+import object.interfaces.AdvObject;
 import object.Item;
 import object.Scene;
+import object.Container;
 import process.Response;
 import util.AdvStringBuilder;
 
@@ -20,8 +21,8 @@ import java.util.Set;
 public class Game {
     private boolean running;
     private Set<Item> inventory;
-    private Set<AdvObject> discovered;
-    private Set<AdvObject> reachable;
+    private Set<AdvObject> discovered; //delete
+    private Set<Container> reachableContainer;
     private Scene location;
     private Response response;
     private boolean exit;
@@ -29,12 +30,13 @@ public class Game {
     public Game(Scene start) {
         this.inventory = new HashSet<>();
         this.discovered = new HashSet<>();
-        this.reachable = new HashSet<>();
+        this.reachableContainer = new HashSet<>();
+        this.reachableContainer.add(start);
+        // this.reachable = new HashSet<>();
         this.location = start;
         this.response = new Response();
         this.exit = false;
         discovered.add(start);
-        reachable.add(start);
     }
 
     public Response respondLocation() {
@@ -83,20 +85,8 @@ public class Game {
         this.discovered.add(discovery);
     }
 
-    public void addReachable(Collection<AdvObject> discovery) {
-        this.reachable.addAll(discovery);
-    }
-
-    public void addReachable(AdvObject discovery) {
-        this.reachable.add(discovery);
-    }
-
-    public void removeReachable(Collection<AdvObject> discovery) {
-        this.reachable.removeAll(discovery);
-    }
-
-    public void removeReachable(AdvObject discovery) {
-        this.reachable.remove(discovery);
+    public void addReachableContainer(Container container) {
+        this.reachableContainer.add(container);
     }
 
     public String toString() {
@@ -110,8 +100,8 @@ public class Game {
                 }
         );
         output.append(System.lineSeparator());
-        output.append("reachable: ");
-        this.reachable.stream().map(AdvObject::getName).forEach(i -> {
+        output.append("reachablContainer: ");
+        this.reachableContainer.stream().map(AdvObject::getName).forEach(i -> {
                     output.append(i);
                     output.append(", ");
                 }
